@@ -87,7 +87,9 @@ public abstract class ChestGUI {
 	}
 
 	void handleClick(InventoryPreClickEvent event) {
-		GUIItem item = items[event.getSlot()];
+		int slot = event.getSlot();
+		if (slot > items.length || slot < 0) return;
+		GUIItem item = items[slot];
 		if (item != null) item.handleClick(event);
 	}
 
