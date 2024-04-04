@@ -3,8 +3,6 @@ plugins {
     id "java"
 }
 
-apply plugin: "maven-publish"
-
 group = "com.github.hapily04"
 version = "1.0-SNAPSHOT"
 
@@ -22,7 +20,8 @@ dependencies {
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = "UTF-8"
-    options.release = 17
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 jar {
@@ -32,14 +31,4 @@ jar {
         )
     }*/
     shadowJar.archiveFileName.set("MSGuis.jar")
-}
-
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            groupId = group
-            artifactId = "MSGuis"
-            this.version = version;
-        }
-    }
 }
