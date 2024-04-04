@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class NormalGUI extends ChestGUI {
 
-	protected NormalGUI(ChestType chestType, Component title, GUIManager guiManager, String format, Map<Character, GUIItem> itemMap) {
+	public NormalGUI(ChestType chestType, Component title, GUIManager guiManager, String format, Map<Character, GUIItem> itemMap) {
 		super(chestType, title, guiManager, format, itemMap);
 	}
 
