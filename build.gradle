@@ -3,6 +3,8 @@ plugins {
     id "java"
 }
 
+apply plugin: "maven-publish"
+
 group = "com.github.hapily04"
 version = "1.0-SNAPSHOT"
 
@@ -30,4 +32,14 @@ jar {
         )
     }*/
     shadowJar.archiveFileName.set("MSGuis.jar")
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = group
+            artifactId = "MSGuis"
+            this.version = version;
+        }
+    }
 }
