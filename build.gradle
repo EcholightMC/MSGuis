@@ -1,5 +1,4 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "8.1.1"
     id "java"
 }
 
@@ -22,13 +21,4 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = "UTF-8"
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
-}
-
-jar {
-    /*manifest {
-        attributes(
-                "Main-Class": "com.github.hapily04.msbuildserver.MSBuildServer"
-        )
-    }*/
-    shadowJar.archiveFileName.set("MSGuis.jar")
 }
