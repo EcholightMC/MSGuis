@@ -73,7 +73,7 @@ public abstract class ChestGUI {
 		char[] chars = format.toCharArray();
 		for (int i = 0; i < chars.length; i++) {
 			char c = chars[i];
-			if (!charSlotMap.containsKey(c)) {
+			if (!tempMap.containsKey(c)) {
 				List<Integer> tempList = new ArrayList<>();
 				tempList.add(i);
 				tempMap.put(c, tempList);
