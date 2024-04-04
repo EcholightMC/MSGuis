@@ -1,0 +1,32 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "8.1.1"
+    id "java"
+}
+
+group = "com.github.hapily04"
+version = "1.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+    maven {
+        url = "https://jitpack.io"
+    }
+}
+
+dependencies {
+    implementation "net.minestom:minestom-snapshots:7320437640"
+    implementation "net.kyori:adventure-text-minimessage:4.14.0"
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = "UTF-8"
+}
+
+jar {
+    /*manifest {
+        attributes(
+                "Main-Class": "com.github.hapily04.msbuildserver.MSBuildServer"
+        )
+    }*/
+    shadowJar.archiveFileName.set("MSGuis.jar")
+}
