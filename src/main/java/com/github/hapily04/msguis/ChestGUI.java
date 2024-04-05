@@ -51,7 +51,7 @@ public abstract class ChestGUI {
 		inventory = new Inventory(chestType.getMinestomInventoryType(), title);
 		this.chestType = chestType;
 		this.guiManager = guiManager;
-		this.format = format;
+		this.format = format.replace(" ", "");
 		items = new GUIItem[format.toCharArray().length];
 		charSlotMap = createCharSlotMap();
 		this.itemMap = itemMap;
