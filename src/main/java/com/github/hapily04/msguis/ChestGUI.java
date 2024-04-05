@@ -51,7 +51,7 @@ public abstract class ChestGUI {
 		inventory = new Inventory(chestType.getMinestomInventoryType(), title);
 		this.chestType = chestType;
 		this.guiManager = guiManager;
-		this.format = format.replace(" ", "");
+		this.format = format;
 		items = new GUIItem[format.toCharArray().length];
 		charSlotMap = createCharSlotMap();
 		this.itemMap = itemMap;
@@ -130,6 +130,7 @@ public abstract class ChestGUI {
 		protected GUIBuilder() {}
 
 		public B format(String format) {
+			format = format.replace("\n", "");
 			int characterCount = format.toCharArray().length;
 			if (characterCount % 9 != 0) throw new IllegalArgumentException("The format is not divisible by 9 (slot count per row).");
 			int rowCount = characterCount/9;
