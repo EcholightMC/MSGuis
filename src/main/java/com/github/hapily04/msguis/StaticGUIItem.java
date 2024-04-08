@@ -3,11 +3,11 @@ package com.github.hapily04.msguis;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.item.ItemStack;
 
-public class NormalGUIItem extends GUIItem {
+public class StaticGUIItem extends GUIItem {
 
 	private final ItemStack item;
 
-	public NormalGUIItem(ItemStack item) {
+	public StaticGUIItem(ItemStack item) {
 		this.item = item;
 	}
 

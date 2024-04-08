@@ -5,6 +5,7 @@ import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.inventory.Inventory;
+import net.minestom.server.item.ItemStack;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,29 +14,13 @@ import java.util.Map;
 
 public abstract class ChestGUI {
 
-	/*  IDEAL
-	ChestGUI.normalBuilder()
-			.format(
-				"#########" +
-				"#       #" +
-				"#   $   #" +
-				"#   $   #" +
-				"#       #" +
-				"#########")
-			.named("<red>My Gui")
-			.setItem('#', new ItemStack(Material.BLACK_STAINED_GLASS_PANE))
-			.setItem('$', new Button(new ItemStack(Material.GOLD_BLOCK), click -> {}))
-			.setProperties(properties)
-			.build();
-	 */
-
 	protected final Inventory inventory;
 	protected final ChestType chestType;
 	protected final GUIManager guiManager;
 
-	protected final String format;
+	protected String format;
 	protected final Map<Character, GUIItem> itemMap;
-	protected final Map<Character, Integer[]> charSlotMap;
+	protected Map<Character, Integer[]> charSlotMap;
 	protected final GUIItem[] items;
 
 	protected ChestGUI(GUIManager guiManager, String format, Map<Character, GUIItem> itemMap) {
@@ -58,12 +43,25 @@ public abstract class ChestGUI {
 		applyFormat();
 	}
 
+	public void setItem(char character, GUIItem item) {
+		itemMap.put(character, item);
+		applyFormat();
+	}
+
+	public void setFormat(String format) {
+		this.format = format;
+		charSlotMap = createCharSlotMap();
+		applyFormat();
+	}
+
 	private void applyFormat() {
 		for (Map.Entry<Character, Integer[]> entry : charSlotMap.entrySet()) {
 			for (Integer slot : entry.getValue()) {
 				GUIItem item = itemMap.get(entry.getKey());
 				items[slot] = item;
-				inventory.setItemStack(slot, item.getItem());
+				ItemStack itemStack = item.getItem();
+				if (inventory.getItemStack(slot) == itemStack) continue;
+				inventory.setItemStack(slot, itemStack);
 			}
 		}
 	}
@@ -86,6 +84,17 @@ public abstract class ChestGUI {
 		return cSlotMap;
 	}
 
+	void notifyItemChange(GUIItem item) {
+		for (Map.Entry<Character, GUIItem> guiItemEntry : itemMap.entrySet()) {
+			if (guiItemEntry.getValue() != item) return;
+			for (Map.Entry<Character, Integer[]> entry : charSlotMap.entrySet()) {
+				for (Integer slot : entry.getValue()) {
+					inventory.setItemStack(slot, item.getItem());
+				}
+			}
+		}
+	}
+
 	void handleClick(InventoryPreClickEvent event) {
 		int slot = event.getSlot();
 		if (slot > items.length || slot < 0) return;
@@ -105,7 +114,6 @@ public abstract class ChestGUI {
 		return guiManager;
 	}
 
-	abstract void notifyItemChange(GUIItem item);
 
 	public void openTo(Player... players) {
 		for (Player player : players) {

@@ -10,18 +10,6 @@ public class NormalGUI extends ChestGUI {
 		super(chestType, title, guiManager, format, itemMap);
 	}
 
-	@Override
-	void notifyItemChange(GUIItem item) {
-		for (Map.Entry<Character, GUIItem> guiItemEntry : itemMap.entrySet()) {
-			if (guiItemEntry.getValue() != item) return;
-			for (Map.Entry<Character, Integer[]> entry : charSlotMap.entrySet()) {
-				for (Integer slot : entry.getValue()) {
-					inventory.setItemStack(slot, item.getItem());
-				}
-			}
-		}
-	}
-
 
 	public static class NormalGUIBuilder extends GUIBuilder<NormalGUI, NormalGUIBuilder> {
 
