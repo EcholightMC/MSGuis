@@ -49,7 +49,7 @@ public abstract class ChestGUI {
 	}
 
 	public void setFormat(String format) {
-		this.format = format;
+		this.format = format.replace("\n", "");
 		charSlotMap = createCharSlotMap();
 		applyFormat();
 	}
