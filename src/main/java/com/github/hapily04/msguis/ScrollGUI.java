@@ -24,7 +24,10 @@ public class ScrollGUI extends ChestGUI {
 		int proposedScrollPos = currentScrollPos + amount;
 		if (proposedScrollPos < 0) return; // low bound check
 		Integer[] scrollSlots = getScrollSlots();
-		if (proposedScrollPos > content.size()-scrollSlots.length) return; // top bound check
+		int remainingItems = content.size()-proposedScrollPos;
+		// checks to see if there are no remaining items & if there are enough items to continue scrolling if we're scrolling up
+		if (remainingItems <= 0 || (scrollSlots.length-remainingItems > amount && currentScrollPos < proposedScrollPos))
+			return; // top bound
 		currentScrollPos = proposedScrollPos;
 		fillScrollContent();
 	}
@@ -61,12 +64,16 @@ public class ScrollGUI extends ChestGUI {
 		int i = currentScrollPos;
 		for (int slot : contentSlots) {
 			ItemStack contentItem;
-			if (i >= content.size()) break;
-			GUIItem item = content.get(i++);
-			if (item == null) contentItem = ItemStack.AIR;
-			else {
-				contentItem = item.getItem();
-				items[slot] = item;
+			if (i >= content.size()) { // out of bounds
+				contentItem = ItemStack.AIR;
+				i++;
+			} else {
+				GUIItem item = content.get(i++);
+				if (item == null) contentItem = ItemStack.AIR;
+				else {
+					contentItem = item.getItem();
+					items[slot] = item;
+				}
 			}
 			if (inventory.getItemStack(slot) == contentItem) continue;
 			inventory.setItemStack(slot, contentItem);
