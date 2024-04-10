@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class ScrollGUI extends ChestGUI {
 
-	private final List<? extends GUIItem> content ;
+	private List<? extends GUIItem> content ;
 
 	private int currentScrollPos = 0;
 
@@ -26,6 +26,11 @@ public class ScrollGUI extends ChestGUI {
 		Integer[] scrollSlots = getScrollSlots();
 		if (proposedScrollPos > content.size()-scrollSlots.length) return; // top bound check
 		currentScrollPos = proposedScrollPos;
+		fillScrollContent();
+	}
+
+	public void setContent(List<? extends GUIItem> content) {
+		this.content = content;
 		fillScrollContent();
 	}
 
