@@ -25,7 +25,7 @@ public class ScrollGUI extends ChestGUI {
 		if (proposedScrollPos < 0) return; // low bound check
 		Integer[] scrollSlots = getScrollSlots();
 		int remainingItems = content.size()-proposedScrollPos;
-		// checks to see if there are no remaining items & if there are enough items to continue scrolling if we're scrolling up
+		// checks to see if there are no remaining items to be shown & if there are enough items to continue scrolling if we're scrolling up
 		if (remainingItems <= 0 || (scrollSlots.length-remainingItems > amount && currentScrollPos < proposedScrollPos))
 			return; // top bound
 		currentScrollPos = proposedScrollPos;
