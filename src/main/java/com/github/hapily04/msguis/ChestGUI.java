@@ -21,18 +21,21 @@ public abstract class ChestGUI {
 	protected String format;
 	protected final Map<Character, GUIItem> itemMap;
 	protected Map<Character, Integer[]> charSlotMap;
+	protected final Map<Indicator, Character> indicators;
 	protected final GUIItem[] items;
 
-	protected ChestGUI(GUIManager guiManager, String format, Map<Character, GUIItem> itemMap) {
-		this(ChestType.ROWS_3, guiManager, format, itemMap);
+	protected ChestGUI(GUIManager guiManager, String format, Map<Character, GUIItem> itemMap,
+					   Map<Indicator, Character> indicators) {
+		this(ChestType.ROWS_3, guiManager, format, itemMap, indicators);
 	}
 
-	protected ChestGUI(ChestType chestType, GUIManager guiManager, String format, Map<Character, GUIItem> itemMap) {
-		this(chestType, Component.text("GUI"), guiManager, format, itemMap);
+	protected ChestGUI(ChestType chestType, GUIManager guiManager, String format, Map<Character, GUIItem> itemMap,
+					   Map<Indicator, Character> indicators) {
+		this(chestType, Component.text("GUI"), guiManager, format, itemMap, indicators);
 	}
 
 	protected ChestGUI(ChestType chestType, Component title, GUIManager guiManager, String format,
-					   Map<Character, GUIItem> itemMap) {
+					   Map<Character, GUIItem> itemMap, Map<Indicator, Character> indicators) {
 		inventory = new Inventory(chestType.getMinestomInventoryType(), title);
 		this.chestType = chestType;
 		this.guiManager = guiManager;
@@ -40,6 +43,7 @@ public abstract class ChestGUI {
 		items = new GUIItem[format.toCharArray().length];
 		charSlotMap = createCharSlotMap();
 		this.itemMap = itemMap;
+		this.indicators = indicators;
 		applyFormat();
 	}
 
@@ -54,7 +58,8 @@ public abstract class ChestGUI {
 		applyFormat();
 	}
 
-	private void applyFormat() {
+	@SuppressWarnings("DuplicatedCode")
+	protected void applyFormat() {
 		for (Map.Entry<Character, Integer[]> entry : charSlotMap.entrySet()) {
 			for (Integer slot : entry.getValue()) {
 				GUIItem item = itemMap.get(entry.getKey());
@@ -114,6 +119,9 @@ public abstract class ChestGUI {
 		return guiManager;
 	}
 
+	public Map<Indicator, Character> getIndicators() {
+		return indicators;
+	}
 
 	public void openTo(Player... players) {
 		for (Player player : players) {
@@ -125,6 +133,10 @@ public abstract class ChestGUI {
 		return new NormalGUI.NormalGUIBuilder();
 	}
 
+	public static ScrollGUI.ScrollGUIBuilder scrollBuilder() {
+		return new ScrollGUI.ScrollGUIBuilder();
+	}
+
 	@SuppressWarnings("unchecked")
 	static abstract class GUIBuilder<T extends ChestGUI, B extends GUIBuilder<T, B>> {
 
@@ -134,6 +146,7 @@ public abstract class ChestGUI {
 		protected Component title;
 		protected GUIManager guiManager;
 		protected final Map<Character, GUIItem> itemMap = new HashMap<>();
+		protected final Map<Indicator, Character> indicators = new HashMap<>();
 
 		protected GUIBuilder() {}
 
@@ -168,6 +181,13 @@ public abstract class ChestGUI {
 
 		public final B item(char c, GUIItem item) {
 			itemMap.put(c, item);
+			return (B) this;
+		}
+
+		public B item(char character, Indicator indicator) {
+			if (indicators.containsKey(indicator))
+				throw new IllegalArgumentException("The " + indicator.toString() + " indicator is already set!");
+			indicators.put(indicator, character);
 			return (B) this;
 		}
 

@@ -6,16 +6,17 @@ import java.util.Map;
 
 public class NormalGUI extends ChestGUI {
 
-	protected NormalGUI(ChestType chestType, Component title, GUIManager guiManager, String format, Map<Character, GUIItem> itemMap) {
-		super(chestType, title, guiManager, format, itemMap);
+	protected NormalGUI(ChestType chestType, Component title, GUIManager guiManager, String format, Map<Character, GUIItem> itemMap, Map<Indicator, Character> indicators) {
+		super(chestType, title, guiManager, format, itemMap, indicators);
 	}
-
 
 	public static class NormalGUIBuilder extends GUIBuilder<NormalGUI, NormalGUIBuilder> {
 
+		protected NormalGUIBuilder() {}
+
 		@Override
 		protected NormalGUI provideGUI() {
-			return new NormalGUI(chestType, title, this.guiManager, this.format, this.itemMap);
+			return new NormalGUI(chestType, title, this.guiManager, this.format, this.itemMap, this.indicators);
 		}
 
 	}
