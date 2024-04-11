@@ -129,14 +129,6 @@ public abstract class ChestGUI {
 		}
 	}
 
-	public static NormalGUI.NormalGUIBuilder normalBuilder() {
-		return new NormalGUI.NormalGUIBuilder();
-	}
-
-	public static ScrollGUI.ScrollGUIBuilder scrollBuilder() {
-		return new ScrollGUI.ScrollGUIBuilder();
-	}
-
 	@SuppressWarnings("unchecked")
 	static abstract class GUIBuilder<T extends ChestGUI, B extends GUIBuilder<T, B>> {
 

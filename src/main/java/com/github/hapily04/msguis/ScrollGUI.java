@@ -93,6 +93,10 @@ public class ScrollGUI extends ChestGUI {
 		return currentScrollPos;
 	}
 
+	public static ScrollGUIBuilder builder() {
+		return new ScrollGUIBuilder();
+	}
+
 	public static class ScrollGUIBuilder extends GUIBuilder<ScrollGUI, ScrollGUIBuilder> {
 
 		private List<? extends GUIItem> content;

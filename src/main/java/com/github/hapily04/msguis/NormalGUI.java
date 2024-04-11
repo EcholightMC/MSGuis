@@ -10,6 +10,10 @@ public class NormalGUI extends ChestGUI {
 		super(chestType, title, guiManager, format, itemMap, indicators);
 	}
 
+	public static NormalGUIBuilder builder() {
+		return new NormalGUIBuilder();
+	}
+
 	public static class NormalGUIBuilder extends GUIBuilder<NormalGUI, NormalGUIBuilder> {
 
 		protected NormalGUIBuilder() {}
