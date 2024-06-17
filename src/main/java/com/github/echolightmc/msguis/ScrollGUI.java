@@ -1,4 +1,4 @@
-package com.github.hapily04.msguis;
+package com.github.echolightmc.msguis;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemStack;
@@ -12,6 +12,8 @@ public class ScrollGUI extends ChestGUI {
 	private List<? extends GUIItem> content ;
 
 	private int currentScrollPos = 0;
+
+	// TODO maybe add 2 different scrolling types: horizontal (not coded) & vertical (what is already coded)
 
 	protected ScrollGUI(ChestType chestType, Component title, GUIManager guiManager, String format,
 						Map<Character, GUIItem> itemMap, Map<Indicator, Character> indicators, List<? extends GUIItem> content) {

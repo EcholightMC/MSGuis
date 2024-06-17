@@ -1,4 +1,4 @@
-package com.github.hapily04.msguis;
+package com.github.echolightmc.msguis;
 
 import net.minestom.server.inventory.InventoryType;
 
