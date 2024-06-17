@@ -1,5 +1,6 @@
 plugins {
     id "java"
+    id "maven-publish"
 }
 
 group = "com.github.echolightmc"
@@ -21,4 +22,35 @@ tasks.withType(JavaCompile).configureEach {
     options.encoding = "UTF-8"
     sourceCompatibility = JavaVersion.VERSION_17
     targetCompatibility = JavaVersion.VERSION_17
+}
+
+java {
+    withSourcesJar()
+    withJavadocJar()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = group
+            artifactId = rootProject.name
+            version = this.version
+            from components.java
+
+            pom {
+                name = artifactId
+                description = "Easy GUI library made for Minestom"
+            }
+        }
+    }
+    repositories {
+        maven {
+            credentials {
+                username = "$repoHapilyUsername"
+                password = "$repoHapilyPassword"
+            }
+
+            url = "https://maven.hapily.me/releases"
+        }
+    }
 }
