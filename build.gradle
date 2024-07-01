@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.github.echolightmc"
-version = "1.0-SNAPSHOT"
+version = "1.1-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -14,8 +14,8 @@ repositories {
 }
 
 dependencies {
-    implementation "net.minestom:minestom-snapshots:7320437640"
-    implementation "net.kyori:adventure-text-minimessage:4.14.0"
+    compileOnly "net.minestom:minestom-snapshots:7320437640"
+    implementation "net.kyori:adventure-text-minimessage:4.16.0"
 }
 
 tasks.withType(JavaCompile).configureEach {

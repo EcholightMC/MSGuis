@@ -2,6 +2,7 @@ package com.github.echolightmc.msguis;
 
 import net.kyori.adventure.text.Component;
 import net.minestom.server.item.ItemStack;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +49,7 @@ public class ScrollGUI extends ChestGUI {
 				GUIItem item = itemMap.get(entry.getKey());
 				items[slot] = item;
 				ItemStack itemStack = item.getItem();
-				if (inventory.getItemStack(slot) == itemStack) continue;
+				if (inventory.getItemStack(slot).equals(itemStack)) continue;
 				inventory.setItemStack(slot, itemStack);
 			}
 		}
@@ -61,7 +62,29 @@ public class ScrollGUI extends ChestGUI {
 		fillScrollContent();
 	}
 
-	private void fillScrollContent() {
+	@Override
+	public void refreshDynamicItems() {
+		super.refreshDynamicItems();
+		Integer[] contentSlots = getScrollSlots();
+		int i = currentScrollPos;
+		for (int slot : contentSlots) {
+			ItemStack contentItem;
+			if (i >= content.size()) { // out of bounds
+				contentItem = ItemStack.AIR;
+				i++;
+			} else {
+				GUIItem item = content.get(i++);
+				if (!(item instanceof DynamicGUIItem)) continue;
+				contentItem = item.getItem();
+				items[slot] = item;
+			}
+			if (inventory.getItemStack(slot).equals(contentItem)) continue;
+			inventory.setItemStack(slot, contentItem);
+		}
+	}
+
+	@ApiStatus.Internal
+	public void fillScrollContent() {
 		Integer[] contentSlots = getScrollSlots();
 		int i = currentScrollPos;
 		for (int slot : contentSlots) {
@@ -77,7 +100,7 @@ public class ScrollGUI extends ChestGUI {
 					items[slot] = item;
 				}
 			}
-			if (inventory.getItemStack(slot) == contentItem) continue;
+			if (inventory.getItemStack(slot).equals(contentItem)) continue;
 			inventory.setItemStack(slot, contentItem);
 		}
 	}

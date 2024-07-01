@@ -61,11 +61,24 @@ public abstract class ChestGUI {
 	@SuppressWarnings("DuplicatedCode")
 	protected void applyFormat() {
 		for (Map.Entry<Character, Integer[]> entry : charSlotMap.entrySet()) {
+			GUIItem item = itemMap.get(entry.getKey());
 			for (Integer slot : entry.getValue()) {
-				GUIItem item = itemMap.get(entry.getKey());
 				items[slot] = item;
 				ItemStack itemStack = item.getItem();
-				if (inventory.getItemStack(slot) == itemStack) continue;
+				if (inventory.getItemStack(slot).equals(itemStack)) continue;
+				inventory.setItemStack(slot, itemStack);
+			}
+		}
+	}
+
+	public void refreshDynamicItems() {
+		for (Map.Entry<Character, Integer[]> entry : charSlotMap.entrySet()) {
+			GUIItem item = itemMap.get(entry.getKey());
+			if (!(item instanceof DynamicGUIItem)) continue;
+			for (Integer slot : entry.getValue()) {
+				items[slot] = item;
+				ItemStack itemStack = item.getItem();
+				if (inventory.getItemStack(slot).equals(itemStack)) continue;
 				inventory.setItemStack(slot, itemStack);
 			}
 		}
@@ -171,8 +184,8 @@ public abstract class ChestGUI {
 			return (B) this;
 		}
 
-		public final B item(char c, GUIItem item) {
-			itemMap.put(c, item);
+		public final B item(char character, GUIItem item) {
+			itemMap.put(character, item);
 			return (B) this;
 		}
 
