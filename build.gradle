@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.github.echolightmc"
-version = "1.1-SNAPSHOT"
+version = "1.2-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -14,19 +14,19 @@ repositories {
 }
 
 dependencies {
-    compileOnly "net.minestom:minestom-snapshots:7320437640"
+    compileOnly "net.minestom:minestom-snapshots:1d0f512256"
     implementation "net.kyori:adventure-text-minimessage:4.16.0"
 }
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = "UTF-8"
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
 }
 
 java {
     withSourcesJar()
     withJavadocJar()
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 publishing {
