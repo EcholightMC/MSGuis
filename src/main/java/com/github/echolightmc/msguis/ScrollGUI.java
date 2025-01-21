@@ -10,6 +10,8 @@ import java.util.Map;
 
 public class ScrollGUI extends ChestGUI {
 
+	private static final StaticGUIItem STATIC_AIR = new StaticGUIItem(ItemStack.AIR);
+
 	private List<? extends GUIItem> content ;
 
 	private int currentScrollPos = 0;
@@ -70,7 +72,8 @@ public class ScrollGUI extends ChestGUI {
 		for (int slot : contentSlots) {
 			ItemStack contentItem;
 			if (i >= content.size()) { // out of bounds
-				contentItem = ItemStack.AIR;
+				contentItem = STATIC_AIR.getItem();
+				items[slot] = STATIC_AIR;
 				i++;
 			} else {
 				GUIItem item = content.get(i++);
@@ -90,7 +93,8 @@ public class ScrollGUI extends ChestGUI {
 		for (int slot : contentSlots) {
 			ItemStack contentItem;
 			if (i >= content.size()) { // out of bounds
-				contentItem = ItemStack.AIR;
+				contentItem = STATIC_AIR.getItem();
+				items[slot] = STATIC_AIR;
 				i++;
 			} else {
 				GUIItem item = content.get(i++);

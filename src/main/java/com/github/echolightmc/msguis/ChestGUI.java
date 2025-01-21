@@ -24,6 +24,8 @@ public abstract class ChestGUI {
 	protected final Map<Indicator, Character> indicators;
 	protected final GUIItem[] items;
 
+	// TODO actually implement input/output slots and maybe allow those slots to be se
+
 	protected ChestGUI(GUIManager guiManager, String format, Map<Character, GUIItem> itemMap,
 					   Map<Indicator, Character> indicators) {
 		this(ChestType.ROWS_3, guiManager, format, itemMap, indicators);
