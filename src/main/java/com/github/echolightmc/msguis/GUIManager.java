@@ -11,13 +11,14 @@ import net.minestom.server.inventory.Inventory;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.WeakHashMap;
 
 public class GUIManager {
 
 	private static int idCounter = 0;
 
 	private final int ID;
-	private final Map<Inventory, ChestGUI> guiMap = new HashMap<>();
+	private final Map<Inventory, ChestGUI> guiMap = new WeakHashMap<>();
 
 	public GUIManager(GlobalEventHandler globalEventHandler) {
 		ID = idCounter++;
