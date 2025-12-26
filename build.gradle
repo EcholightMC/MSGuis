@@ -47,8 +47,11 @@ publishing {
     repositories {
         maven {
             credentials {
-                username = "$repoHapilyUsername"
-                password = "$repoHapilyPassword"
+                // Avoid hard failure when these are not provided (e.g. local builds / CI test runs).
+                // Provide via Gradle properties: -PrepoHapilyUsername=... -PrepoHapilyPassword=...
+                // or environment variables: REPO_HAPILY_USERNAME / REPO_HAPILY_PASSWORD.
+                username = (findProperty("repoHapilyUsername") ?: System.getenv("REPO_HAPILY_USERNAME") ?: "").toString()
+                password = (findProperty("repoHapilyPassword") ?: System.getenv("REPO_HAPILY_PASSWORD") ?: "").toString()
             }
 
             url = "https://maven.hapily.me/releases"

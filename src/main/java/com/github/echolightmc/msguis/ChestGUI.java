@@ -12,6 +12,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Base class for all formatted chest GUIs in MSGuis.
+ * <p>
+ * A {@code ChestGUI} is primarily defined by:
+ * <ul>
+ *     <li>a {@link #format} string (characters map to slots, 9 columns per row)</li>
+ *     <li>a character-to-{@link GUIItem} mapping ({@link #itemMap})</li>
+ *     <li>an underlying Minestom {@link Inventory}</li>
+ * </ul>
+ * Characters in the format that map to the same value will share the same {@link GUIItem} instance.
+ * <p>
+ * Instances are typically built via the builder exposed by concrete types such as {@link NormalGUI} and
+ * {@link ScrollGUI}. Builders also register the GUI with a {@link GUIManager} for click handling.
+ */
 public abstract class ChestGUI {
 
 	protected final Inventory inventory;
@@ -49,11 +63,27 @@ public abstract class ChestGUI {
 		applyFormat();
 	}
 
+	/**
+	 * Sets (or replaces) the {@link GUIItem} mapped to a character in the format.
+	 * <p>
+	 * This updates all slots whose format character matches {@code character}.
+	 *
+	 * @param character the format character to target
+	 * @param item the item to display/handle clicks for those slots
+	 */
 	public void setItem(char character, GUIItem item) {
 		itemMap.put(character, item);
 		applyFormat();
 	}
 
+	/**
+	 * Replaces the current format string.
+	 * <p>
+	 * Newlines are stripped ({@code "\n"}) before applying. The resulting string length should match
+	 * the inventory size implied by the {@link ChestType}.
+	 *
+	 * @param format the new format string
+	 */
 	public void setFormat(String format) {
 		this.format = format.replace("\n", "");
 		charSlotMap = createCharSlotMap();
@@ -73,6 +103,12 @@ public abstract class ChestGUI {
 		}
 	}
 
+	/**
+	 * Re-renders all slots backed by {@link DynamicGUIItem}.
+	 * <p>
+	 * Use this if a dynamic item's displayed {@link ItemStack} is derived from external state and can change
+	 * without calling {@link DynamicGUIItem#setItem(ItemStack)}.
+	 */
 	public void refreshDynamicItems() {
 		for (Map.Entry<Character, Integer[]> entry : charSlotMap.entrySet()) {
 			GUIItem item = itemMap.get(entry.getKey());
@@ -122,22 +158,50 @@ public abstract class ChestGUI {
 		if (item != null) item.handleClick(event);
 	}
 
+	/**
+	 * Returns the underlying Minestom inventory backing this GUI.
+	 *
+	 * @return the inventory
+	 */
 	public Inventory getInventory() {
 		return inventory;
 	}
 
+	/**
+	 * Returns the configured chest type (size).
+	 *
+	 * @return the chest type
+	 */
 	public ChestType getChestType() {
 		return chestType;
 	}
 
+	/**
+	 * Returns the manager that registered this GUI.
+	 *
+	 * @return the gui manager
+	 */
 	public GUIManager getGuiManager() {
 		return guiManager;
 	}
 
+	/**
+	 * Returns the indicator mappings for this GUI.
+	 * <p>
+	 * Indicators allow a GUI implementation to treat certain format characters specially (e.g. {@link ScrollGUI}
+	 * uses {@link Indicator#CONTENT_SLOT} to identify its scrollable region).
+	 *
+	 * @return indicator mappings (indicator -&gt; character)
+	 */
 	public Map<Indicator, Character> getIndicators() {
 		return indicators;
 	}
 
+	/**
+	 * Opens this GUI inventory for the provided players.
+	 *
+	 * @param players players to open the inventory for
+	 */
 	public void openTo(Player... players) {
 		for (Player player : players) {
 			player.openInventory(inventory);
@@ -157,6 +221,16 @@ public abstract class ChestGUI {
 
 		protected GUIBuilder() {}
 
+		/**
+		 * Sets the format string for the GUI and infers the {@link ChestType} from its row count.
+		 * <p>
+		 * Newlines are removed before validation. The resulting character count must be divisible by 9,
+		 * and the number of rows must be {@code 1..6}.
+		 *
+		 * @param format the format string
+		 * @return this builder
+		 * @throws IllegalArgumentException if the format length is not divisible by 9 or exceeds 6 rows
+		 */
 		public B format(String format) {
 			format = format.replace("\n", "");
 			int characterCount = format.toCharArray().length;
@@ -186,11 +260,31 @@ public abstract class ChestGUI {
 			return (B) this;
 		}
 
+		/**
+		 * Maps the given character in the format to a {@link GUIItem}.
+		 * <p>
+		 * All slots containing {@code character} will display this item and dispatch clicks to it.
+		 *
+		 * @param character the character to map
+		 * @param item the item to use for those slots
+		 * @return this builder
+		 */
 		public final B item(char character, GUIItem item) {
 			itemMap.put(character, item);
 			return (B) this;
 		}
 
+		/**
+		 * Maps an {@link Indicator} to a character in the format.
+		 * <p>
+		 * Some GUI implementations interpret specific indicators (for example, {@link ScrollGUI} uses
+		 * {@link Indicator#CONTENT_SLOT} to locate the scrollable content region).
+		 *
+		 * @param character the format character that represents the indicator
+		 * @param indicator the indicator to associate with that character
+		 * @return this builder
+		 * @throws IllegalArgumentException if the indicator is already mapped
+		 */
 		public B item(char character, Indicator indicator) {
 			if (indicators.containsKey(indicator))
 				throw new IllegalArgumentException("The " + indicator.toString() + " indicator is already set!");
@@ -198,6 +292,12 @@ public abstract class ChestGUI {
 			return (B) this;
 		}
 
+		/**
+		 * Sets the {@link GUIManager} that will register the created GUI.
+		 *
+		 * @param manager the manager to register with
+		 * @return this builder
+		 */
 		public B manager(GUIManager manager) {
 			this.guiManager = manager;
 			return (B) this;
@@ -205,6 +305,11 @@ public abstract class ChestGUI {
 
 		protected abstract T provideGUI();
 
+		/**
+		 * Builds the GUI, assigns each configured {@link GUIItem} its owning GUI, and registers it with the manager.
+		 *
+		 * @return the created GUI instance
+		 */
 		public T build() {
 			T gui = provideGUI();
 			for (Map.Entry<Character, GUIItem> entry : itemMap.entrySet()) {

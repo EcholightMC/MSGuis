@@ -2,6 +2,11 @@ package com.github.echolightmc.msguis;
 
 import net.minestom.server.inventory.InventoryType;
 
+/**
+ * Supported chest inventory sizes.
+ * <p>
+ * Each type maps to a Minestom {@link InventoryType} and exposes the corresponding row count.
+ */
 public enum ChestType {
 
 	ROWS_1(InventoryType.CHEST_1_ROW, 1),
@@ -21,10 +26,20 @@ public enum ChestType {
 		this.rowCount = rowCount;
 	}
 
+	/**
+	 * Returns the corresponding Minestom inventory type.
+	 *
+	 * @return the minestom inventory type
+	 */
 	public InventoryType getMinestomInventoryType() {
 		return minestomInventoryType;
 	}
 
+	/**
+	 * Returns the number of rows for this chest type.
+	 *
+	 * @return row count
+	 */
 	public int getRowCount() {
 		return rowCount;
 	}
