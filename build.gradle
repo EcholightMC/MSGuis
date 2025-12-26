@@ -47,8 +47,8 @@ publishing {
     repositories {
         maven {
             credentials {
-                username = "$repoHapilyUsername"
-                password = "$repoHapilyPassword"
+                username = project.findProperty("repoHapilyUsername") ?: ""
+                password = project.findProperty("repoHapilyPassword") ?: ""
             }
 
             url = "https://maven.hapily.me/releases"
