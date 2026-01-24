@@ -16,7 +16,7 @@ public class DemoMain {
 
 	public static GUIManager GUI_MANAGER;
 
-	public static void main(String[] args) {
+	static void main() {
 		MinecraftServer minecraftServer = MinecraftServer.init();
 
 		GUI_MANAGER = new GUIManager(MinecraftServer.getGlobalEventHandler());

@@ -4,19 +4,19 @@ plugins {
 }
 
 group = "com.github.echolightmc"
-version = "1.4-SNAPSHOT"
+version = "1.5-SNAPSHOT"
 
 repositories {
     mavenCentral()
     maven {
-        url = "https://jitpack.io"
+        url = "https://oss.sonatype.org/content/repositories/snapshots/"
     }
 }
 
 dependencies {
-    compileOnly "net.minestom:minestom-snapshots:1d0f512256"
-    testImplementation("net.minestom:minestom-snapshots:1d0f512256")
-    implementation "net.kyori:adventure-text-minimessage:4.16.0"
+    compileOnly("net.minestom:minestom:2026.01.08-1.21.11")
+    testImplementation("net.minestom:minestom:2026.01.08-1.21.11")
+    implementation("net.kyori:adventure-text-minimessage:4.26.1")
 }
 
 tasks.withType(JavaCompile).configureEach {
@@ -26,8 +26,6 @@ tasks.withType(JavaCompile).configureEach {
 java {
     withSourcesJar()
     withJavadocJar()
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
 }
 
 publishing {

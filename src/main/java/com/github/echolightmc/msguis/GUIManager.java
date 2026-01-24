@@ -4,10 +4,12 @@ import net.minestom.server.event.EventFilter;
 import net.minestom.server.event.EventListener;
 import net.minestom.server.event.EventNode;
 import net.minestom.server.event.GlobalEventHandler;
+import net.minestom.server.event.inventory.InventoryItemChangeEvent;
 import net.minestom.server.event.inventory.InventoryPreClickEvent;
 import net.minestom.server.event.trait.InventoryEvent;
 import net.minestom.server.inventory.AbstractInventory;
 import net.minestom.server.inventory.Inventory;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,12 +36,12 @@ public class GUIManager {
 	}
 
 	private void hookEvents(GlobalEventHandler globalEventHandler) {
-		EventNode<InventoryEvent> node = EventNode.type("MSGuis-Manager-" + ID, EventFilter.INVENTORY)
-														  .addListener(getClickListener());
+		EventNode<@NotNull InventoryEvent> node = EventNode.type("MSGuis-Manager-" + ID, EventFilter.INVENTORY)
+                                                           .addListener(getClickListener());
 		globalEventHandler.addChild(node);
 	}
 
-	private EventListener<InventoryPreClickEvent> getClickListener() {
+	private EventListener<@NotNull InventoryPreClickEvent> getClickListener() {
 		return EventListener.of(InventoryPreClickEvent.class, event -> {
 			AbstractInventory abstractInventory = event.getInventory();
 			if (!(abstractInventory instanceof Inventory inventory)) return;
